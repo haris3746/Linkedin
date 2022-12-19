@@ -22,6 +22,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 SCRAPPER = False
 
+start_time = time.time()
 
 def driverInit():
     option = uc.ChromeOptions()
@@ -116,6 +117,8 @@ def run():
     csvfile=open("database.csv",'a')
     csvwrite=csv.writer(csvfile)
     for key in all_keywords:
+        if time.time() - start_time > 1800:
+            break
         driver.get(f"https://www.linkedin.com/search/results/all/?keywords={key.replace(' ','%20')}&origin=GLOBAL_SEARCH_HEADER&sid=.Bm")
         time.sleep(5)
         driver.find_element(By.XPATH, "/html/body/div[4]/div[3]/div[2]/section/div/nav/div/ul/li[1]/button").click()
@@ -140,6 +143,8 @@ def run():
                     allUrls = driver.find_elements(by=By.XPATH,
                                                    value="//ul[@class='reusable-search__entity-result-list list-style-none']//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a//span//span[1]")
                     for a in allUrls:
+                        if time.time()-start_time > 1800:
+                            break
                         try:
                             print(a.text)
                             connectBtn = driver.find_element(By.XPATH,
@@ -161,10 +166,11 @@ def run():
                                                                                             "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
                                 insertText = f"\n[Info] Connect Sent to : {a.text}"
                                 print(insertText)
+                                print(time.time() - start_time)
                             except:
                                 WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
                                                                                             "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
-                            t_delay = random.randint(100, 150)
+                            t_delay = random.randint(40, 70)
                             print(f"\n[Info] Sleeping for {t_delay} secs")
                             time.sleep(t_delay)
                             csvwrite.writerow([a,key,datetime.now()])
@@ -179,30 +185,6 @@ def run():
                 break
     driver.quit()
     startBot1.config(state="active")
-
-
-def startBot():
-    startBot1.config(state="disabled")
-    thread = threading.Thread(target=run)
-    thread.start()
-
-
-def tr():
-    global SCRAPPER
-    SCRAPPER = True
-    scrape2.config(state="disabled")
-
-
-def quitM():
-    Mainwindow.destroy()
-
-
-def stopBot():
-    try:
-        driver.quit()
-        startBot1.config(state="active")
-    except:
-        pass
 
 
 
