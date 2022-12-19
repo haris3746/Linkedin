@@ -1,17 +1,10 @@
 import csv
 import os
-import sys
 import json
 import time
-import requests
 import random
-import threading
-from tkinter import *
-import tkinter as tk
 from os import system, name
 from datetime import datetime
-from tkinter import messagebox
-import tkinter.scrolledtext as tkscrolled
 import undetected_chromedriver as uc
 from typing import Dict, List
 from selenium.webdriver import ActionChains
@@ -194,7 +187,7 @@ def updator():
         os.remove(f"{os.getcwd()}/chromedriver.exe")
     except:
         pass
-    messagebox.showinfo('Success', "Chromedriver Updated Successfully")
+
 
 
 run()
