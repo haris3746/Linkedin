@@ -99,13 +99,14 @@ def run():
     print("Connecting.")
     TKScrollTXT1 = "Hi! [name] What you doing these days"
     driver = driverInit()
+    login_using_cookie_file(driver, "cookies.txt")
     driver.get("https://www.linkedin.com")
     time.sleep(5)
-    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[1]/input").send_keys("exploretheweb@yahoo.com")
-    time.sleep(1.5)
-    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[2]/input").send_keys("123PPH123*")
-    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/button").click()
-    time.sleep(5)
+    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[1]/input").send_keys("exploretheweb@yahoo.com")
+    #time.sleep(1.5)
+    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[2]/input").send_keys("123PPH123*")
+    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/button").click()
+    #time.sleep(5)
     all_keywords=returnFiletoList("keywords.txt")
     csvfile=open("database.csv",'a')
     csvwrite=csv.writer(csvfile)
@@ -177,7 +178,7 @@ def run():
                 driver.quit()
                 break
     driver.quit()
-    startBot1.config(state="active")
+
 
 
 
