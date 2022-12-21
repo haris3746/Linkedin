@@ -23,7 +23,7 @@ def driverInit():
     option.add_argument("--log-level=3")
     option.add_argument("--disable-infobars")
     option.add_argument("--disable-extensions")
-    option.add_argument("--headless")
+    #option.add_argument("--headless")
     prefs = {"credentials_enable_service": False,
              "profile.password_manager_enabled": False,
              "profile.default_content_setting_values.notifications": 2
@@ -113,10 +113,9 @@ def run():
     for key in all_keywords:
         if time.time() - start_time > 1800:
             break
-        driver.get(f"https://www.linkedin.com/search/results/all/?keywords={key.replace(' ','%20')}&origin=GLOBAL_SEARCH_HEADER&sid=.Bm")
+        driver.get(f"https://www.linkedin.com/search/results/people/?keywords={key.replace(' ','%20')}&origin=GLOBAL_SEARCH_HEADER&sid=Bp%3B")
         time.sleep(5)
-        driver.find_element(By.XPATH, "/html/body/div[4]/div[3]/div[2]/section/div/nav/div/ul/li[1]/button").click()
-        time.sleep(4)
+
 
 
         finalUrl = driver.current_url
