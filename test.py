@@ -134,9 +134,11 @@ def run():
     time.sleep(1.5)
     driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[2]/input").send_keys("123PPH123*")
     driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/button").click()
+    time.sleep(3)
+    driver.refresh()
     time.sleep(5)
-    #my_name = ((driver.find_element(By.XPATH, "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(","))[1]
-    #print(my_name)
+    my_name = ((driver.find_element(By.XPATH, "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(","))[1]
+    print(my_name)
     driver.get("https://www.linkedin.com/mynetwork/")
     time.sleep(3)
     t = driver.find_element(By.CLASS_NAME, "pl3").text
