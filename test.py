@@ -127,14 +127,14 @@ def run():
     TKScrollTXT3 = "Hello [name], I hope this message finds you well. My name is [Your Name] and I specialize in helping businesses, like yours, save time and streamline their processes through the use of AI and automation. As someone who works in digital marketing, I'm sure you understand the importance of staying up-to-date with the latest trends and technologies in order to achieve your business goals. However, with so many tasks and responsibilities on your plate, it can be difficult to find the time to do everything that needs to be done. That's where AI and automation come in. By using these tools, you can automate repetitive and time-consuming tasks, freeing up your time to focus on more important, high-value work. I believe that our AI and automation solutions could be a valuable asset to your business. Would you be open to discussing how these tools could potentially benefit your company and save you time? I'd love to schedule a call at your convenience to learn more about your needs and see if our solutions might be a good fit. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
 
     driver = driverInit()
-    login_using_cookie_file(driver, "cookies.txt")
+    #login_using_cookie_file(driver, "cookies.txt")
     driver.get("https://www.linkedin.com")
     time.sleep(5)
-    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[1]/input").send_keys("exploretheweb@yahoo.com")
-    #time.sleep(1.5)
-    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[2]/input").send_keys("123PPH123*")
-    #driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/button").click()
-    #time.sleep(5)
+    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[1]/input").send_keys("exploretheweb@yahoo.com")
+    time.sleep(1.5)
+    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/div[2]/div[2]/input").send_keys("123PPH123*")
+    driver.find_element(By.XPATH, "/html/body/main/section[1]/div/div/form/button").click()
+    time.sleep(5)
     my_name = ((driver.find_element(By.XPATH, "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(","))[1]
     print(my_name)
     driver.get("https://www.linkedin.com/mynetwork/")
