@@ -19,7 +19,7 @@ import logging
 SCRAPPER = False
 
 
-
+print("Starting")
 
 
 
@@ -44,7 +44,7 @@ def driverInit():
     option.add_argument("--log-level=3")
     option.add_argument("--disable-infobars")
     option.add_argument("--disable-extensions")
-    #option.add_argument("--headless")
+    option.add_argument("--headless")
     prefs = {"credentials_enable_service": False,
              "profile.password_manager_enabled": False,
              "profile.default_content_setting_values.notifications": 2
