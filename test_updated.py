@@ -15,27 +15,19 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
+from datetime import datetime
+
 
 SCRAPPER = False
 
 
-print("Starting")
-
-
-
 class Solution:
-   def solve(self, s0, s1):
-      s0 = s0.lower()
-      s1 = s1.lower()
-      s0List = s0.split(" ")
-      s1List = s1.split(" ")
-      return len(list(set(s0List)&set(s1List)))
-
-
-
-
-
-
+    def solve(self, s0, s1):
+        s0 = s0.lower()
+        s1 = s1.lower()
+        s0List = s0.split(" ")
+        s1List = s1.split(" ")
+        return len(list(set(s0List) & set(s1List)))
 
 
 def driverInit():
@@ -44,7 +36,7 @@ def driverInit():
     option.add_argument("--log-level=3")
     option.add_argument("--disable-infobars")
     option.add_argument("--disable-extensions")
-    option.add_argument("--headless")
+    # option.add_argument("--headless")
     prefs = {"credentials_enable_service": False,
              "profile.password_manager_enabled": False,
              "profile.default_content_setting_values.notifications": 2
@@ -73,6 +65,7 @@ def scroll_down(driver):
             break
         last_height = new_height
         time.sleep(2)
+
 
 def domain_to_url(domain: str) -> str:
     if domain.startswith(".") and "www" not in domain:
@@ -109,6 +102,7 @@ def login_using_cookie_file(driver: WebDriver, cookie_file: str):
                 print(f"Couldn't set cookie {cookie['name']} for {domain}")
     return True
 
+
 def returnFiletoList(filename):
     with open(filename, "r") as f:
         LinesToList = f.read().split("\n")
@@ -124,35 +118,39 @@ def run():
     collection2 = db["excel_data"]
     initial_con = list(collection1.find())
     n = len(initial_data)
+    print(initial_data[n - 1])
 
     cn = len(initial_con)
+    d_n = len(list(collection2.find()))
+    basic_data = list(collection2.find())[d_n-1]
+
 
     acc_conf = []
     sent_conf = []
     prev_conf = []
-    name = []
-    company = []
-    sent_time = []
-    sent_status = []
-    TKScrollTXT1 = "Hi [name] I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your company, and was impressed with the work you've done in the marketing field. As the founder of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Best Regards Chao"
-    TKScrollTXT2 = "Hi [name], I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your company, and was impressed with the work you do in the marketing field. As the manager of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Would you be open to discussing how AI and automation could potentially benefit your business? I'd love to schedule a call at your convenience to learn more about your needs and see if my expertise might be able to assist in any way. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
-    TKScrollTXT3 = "Hello [name], I hope this message finds you well. My name is [Your Name] and I specialize in helping businesses, like yours, save time and streamline their processes through the use of AI and automation. As someone who works in digital marketing, I'm sure you understand the importance of staying up-to-date with the latest trends and technologies in order to achieve your business goals. However, with so many tasks and responsibilities on your plate, it can be difficult to find the time to do everything that needs to be done. That's where AI and automation come in. By using these tools, you can automate repetitive and time-consuming tasks, freeing up your time to focus on more important, high-value work. I believe that our AI and automation solutions could be a valuable asset to your business. Would you be open to discussing how these tools could potentially benefit your company and save you time? I'd love to schedule a call at your convenience to learn more about your needs and see if our solutions might be a good fit. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
+    name = basic_data['name']
+    ability = basic_data['designation']
+    sent_time = basic_data['time']
+    sent_status = basic_data['sent-status']
+    location = basic_data['location']
+    TKScrollTXT1 = "Hi [name] I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your ability, and was impressed with the work you've done in the marketing field. As the founder of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Best Regards Chao"
+    TKScrollTXT2 = "Hi [name], I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your ability, and was impressed with the work you do in the marketing field. As the manager of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Would you be open to discussing how AI and automation could potentially benefit your business? I'd love to schedule a call at your convenience to learn more about your needs and see if my expertise might be able to assist in any way. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
+    TKScrollTXT3 = "Hello [name], I hope this message finds you well. My name is [Your Name] and I specialize in helping businesses, like yours, save time and streamline their processes through the use of AI and automation. As someone who works in digital marketing, I'm sure you understand the importance of staying up-to-date with the latest trends and technologies in order to achieve your business goals. However, with so many tasks and responsibilities on your plate, it can be difficult to find the time to do everything that needs to be done. That's where AI and automation come in. By using these tools, you can automate repetitive and time-consuming tasks, freeing up your time to focus on more important, high-value work. I believe that our AI and automation solutions could be a valuable asset to your business. Would you be open to discussing how these tools could potentially benefit your ability and save you time? I'd love to schedule a call at your convenience to learn more about your needs and see if our solutions might be a good fit. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
 
     for c in range(0, len(initial_data[n - 1]['cookies'])):
-        cus_name = []
-        cus_company = []
-        cus_sent_time = []
-        cus_sent_status = []
+        cus_name = name[c]
+        cus_ability = ability[c]
+        cus_sent_time = sent_time[c]
+        cus_sent_status = sent_status[c]
+        location_in = location[c]
         start_time = time.time()
         cookies = initial_data[n - 1]['cookies'][c]
+        print(cookies)
         connect = int(initial_con[cn - 1]['sent_con'][c])
-
 
         file = open("initial.txt", "w")
         file.write(cookies.decode('utf-8'))
         file.close()
-
-
 
         global driver
         ob = Solution()
@@ -167,8 +165,6 @@ def run():
         my_name = ((driver.find_element(By.XPATH,
                                         "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(
             ","))[1]
-
-
 
         print(my_name)
         try:
@@ -188,10 +184,7 @@ def run():
             acc_conf.append(0)
             prev_conf.append(0)
 
-
-
         print("Accepted Connects: ", accepted_co)
-
 
         all_keywords = [initial_data[n - 1]['keyword'][c]]
         csvfile = open("database.csv", 'a')
@@ -212,91 +205,138 @@ def run():
             counter = 1
             while True:
                 try:
-                    if time.time() - start_time > 1200:
+                    if time.time() - start_time > 600:
                         break
                     in_count = 1
                     driver.get(f"{finalUrl}&page={counter}")
                     time.sleep(3)
                     scroll_down(driver)
                     time.sleep(2)
-                    pChk = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-                        (By.XPATH, "//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a")))
-                    if pChk:
-                        allUrls = driver.find_elements(by=By.XPATH,
-                                                       value="//ul[@class='reusable-search__entity-result-list list-style-none']//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a//span//span[1]")
-                        for a in allUrls:
-                            if time.time() - start_time > 1200:
-                                break
+                    # pChk = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+                    #   (By.XPATH, "//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a")))
+                    # if pChk:
+                    # allUrls = driver.find_elements(by=By.XPATH,
+                    # value="//ul[@class='reusable-search__entity-result-list list-style-none']//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a//span//span[1]")
+                    allUrls = []
+                    # time.sleep(100)
+                    for u in range(1, 11):
+                        try:
+                            allUrls.append(driver.find_element(By.XPATH,
+                                                               '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                                   u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+                        except:
                             try:
-                                print(a.text)
-                                cus_name.append(a.text)
-                                try:
-                                    destn = driver.find_element(By.XPATH,
-                                                                '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
-                                                                    in_count) + ']/div/div/div[2]/div[1]/div[2]/div[1]').text
-                                    cus_company.append(destn)
-                                except:
-                                    cus_company.append("Not Found")
-
-                                in_count = in_count + 1
-
-                                connectBtn = driver.find_element(By.XPATH,
-                                                                 f"//button[@aria-label='Invite {str(a.text).strip()} to connect']")
-                                actions = ActionChains(driver)
-                                actions.move_to_element(connectBtn).perform()
-                                time.sleep(0.5)
-                                connectBtn.click()
-                                try:
-                                    addNoteBtn = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
-                                        (By.XPATH, "(//span[@class='artdeco-button__text' and text()='Add a note'])")))
-                                    addNoteBtn.click()
-                                    if ob.solve(destn, manager) == 1:
-                                        msgSend = str(TKScrollTXT2)
-                                        msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
-                                        msgSend = msgSend.replace("[Your Name]", my_name.strip())
-
-                                        writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-                                            (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
-                                        writeMsgArea.send_keys(msgSend)
-                                    elif ob.solve(destn, director) == 1:
-                                        msgSend = str(TKScrollTXT3)
-                                        msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
-                                        msgSend = msgSend.replace("[Your Name]", my_name.strip())
-
-                                        writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-                                            (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
-                                        writeMsgArea.send_keys(msgSend)
-                                    else:
-                                        msgSend = str(TKScrollTXT1)
-                                        msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
-                                        msgSend = msgSend.replace("[Your Name]", my_name.strip())
-
-                                        writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-                                            (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
-                                        writeMsgArea.send_keys(msgSend)
-
-                                    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                                "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
-                                    insertText = f"\n[Info] Connect Sent to : {a.text}"
-                                    connect = connect + 1
-                                    print(insertText)
-                                    print(time.time() - start_time)
-                                except:
-                                    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                                "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
-                                t_delay = random.randint(40, 70)
-                                cus_sent_time.append(time.time())
-                                print(f"\n[Info] Sleeping for {t_delay} secs")
-
-                                time.sleep(t_delay)
-                                csvwrite.writerow([a.text, key, datetime.now()])
-                                csvfile.flush()
+                                allUrls.append(driver.find_element(By.XPATH,
+                                                                   '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                                       u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
                             except:
-                                # logging.exception('msg')
-                                cus_sent_status.append("Not Sent")
-                                cus_sent_time.append(("N/A"))
-                                pass
-                                # print(f"\n[Info] No Connect Button Found for : {a.text}")
+                                try:
+                                    allUrls.append(driver.find_element(By.XPATH,
+                                                                       '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                           u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+                                except:
+                                    allUrls.append(driver.find_element(By.XPATH,
+                                                                       '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                           u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+
+                    for a in allUrls:
+                        if time.time() - start_time > 600:
+                            break
+                        try:
+                            # a.click()
+                            # time.sleep(50)
+                            print(a.text)
+
+                            destn = driver.find_element(By.XPATH,
+                                                        "(//div[contains(@class,'entity-result__primary-subtitle t-14')])[" + str(
+                                                            in_count) + "]").text
+                            # loc = driver.find_element(By.XPATH,
+                            #                         "(//div[contains(@class,'linked-area flex-1')]//div)[" + str(
+                            #                            in_count + 1) + "]").text
+                            try:
+                                loc = driver.find_element(By.XPATH,
+                                                          '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                              in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
+                            except:
+                                try:
+                                    loc = driver.find_element(By.XPATH,
+                                                              '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                                  in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
+                                except:
+                                    try:
+                                        loc = driver.find_element(By.XPATH,
+                                                                  '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                      in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
+                                    except:
+                                        loc = driver.find_element(By.XPATH,
+                                                                  '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                      in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
+
+                            print(destn)
+                            print(loc)
+
+                            in_count = in_count + 1
+
+                            connectBtn = driver.find_element(By.XPATH,
+                                                             f"//button[@aria-label='Invite {str(a.text).strip()} to connect']")
+                            actions = ActionChains(driver)
+                            actions.move_to_element(connectBtn).perform()
+                            time.sleep(0.5)
+                            connectBtn.click()
+                            try:
+                                addNoteBtn = WebDriverWait(driver, 5).until(EC.element_to_be_clickable(
+                                    (By.XPATH, "(//span[@class='artdeco-button__text' and text()='Add a note'])")))
+                                addNoteBtn.click()
+                                if ob.solve(destn, manager) == 1:
+                                    msgSend = str(TKScrollTXT2)
+                                    msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
+                                    msgSend = msgSend.replace("[Your Name]", my_name.strip())
+
+                                    writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+                                        (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
+                                    writeMsgArea.send_keys(msgSend)
+                                elif ob.solve(destn, director) == 1:
+                                    msgSend = str(TKScrollTXT3)
+                                    msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
+                                    msgSend = msgSend.replace("[Your Name]", my_name.strip())
+
+                                    writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+                                        (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
+                                    writeMsgArea.send_keys(msgSend)
+                                else:
+                                    msgSend = str(TKScrollTXT1)
+                                    msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
+                                    msgSend = msgSend.replace("[Your Name]", my_name.strip())
+
+                                    writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+                                        (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
+                                    writeMsgArea.send_keys(msgSend)
+
+                                WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                                                                                            "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
+                                insertText = f"\n[Info] Connect Sent to : {a.text}"
+                                connect = connect + 1
+                                print(insertText)
+                                print(time.time() - start_time)
+                            except:
+                                WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                                                                                            "(//button[contains(@class,'artdeco-button artdeco-button--2') and @aria-label='Send now'])"))).click()
+                            t_delay = random.randint(40, 70)
+                            cus_sent_time.append(datetime.now())
+                            cus_ability.append(destn)
+                            cus_name.append(a.text)
+                            cus_sent_status.append("Request Sent")
+                            location_in.append(loc)
+                            print(f"\n[Info] Sleeping for {t_delay} secs")
+
+                            time.sleep(t_delay)
+                            csvwrite.writerow([a.text, key, datetime.now()])
+                            csvfile.flush()
+                        except:
+                            # logging.exception('msg')
+
+                            pass
+                            # print(f"\n[Info] No Connect Button Found for : {a.text}")
                     counter += 1
                 except:
                     print("\n[Info] No more profiles found....")
@@ -304,12 +344,14 @@ def run():
                     break
         sent_conf.append(connect)
         name.append(cus_name)
-        company.append(cus_company)
+        ability.append(cus_ability)
         sent_status.append(cus_sent_status)
         sent_time.append(cus_sent_time)
+        location.append(location_in)
         driver.quit()
     collection1.insert_one({'prev_con': prev_conf, 'acc_con': acc_conf, 'sent_con': sent_conf})
-    collection2.insert_one({'name': name, 'designation': company, 'time': sent_time, 'sent-status': sent_status})
+    collection2.insert_one(
+        {'name': name, 'designation': ability, 'time': sent_time, 'sent-status': sent_status, 'location': location})
 
 
 def updator():
@@ -321,7 +363,3 @@ def updator():
 
 
 run()
-
-
-
-
