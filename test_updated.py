@@ -151,7 +151,7 @@ def run():
         keyword = initial_data[n - 1]['keyword'][c]
         start_time = time.time()
         cookies = initial_data[n - 1]['cookies'][c]
-        print(cookies)
+        #print(cookies)
         connect = int(initial_con[cn - 1]['sent_con'][c])
 
         file = open("initial.txt", "w")
@@ -168,11 +168,11 @@ def run():
         driver.get("https://www.linkedin.com")
         time.sleep(7)
 
-        #my_name = ((driver.find_element(By.XPATH,
-         #                               "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(
-          #  ","))[1]
+        my_name = ((driver.find_element(By.XPATH,
+                                        "//div[contains(@class,'t-16 t-black')]").text).split(
+            ","))[1]
 
-        #print(my_name)
+        print(my_name)
         try:
             driver.get("https://www.linkedin.com/mynetwork/")
             time.sleep(7)
