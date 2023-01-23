@@ -128,14 +128,17 @@ def run():
     acc_conf = []
     sent_conf = []
     prev_conf = []
-    name = basic_data['name']
-    ability = basic_data['designation']
-    sent_time = basic_data['time']
-    sent_status = basic_data['sent-status']
-    location = basic_data['location']
-    TKScrollTXT1 = "Hi [name] I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your ability, and was impressed with the work you've done in the marketing field. As the founder of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Best Regards Chao"
-    TKScrollTXT2 = "Hi [name], I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for marketing agencies. I recently came across your ability, and was impressed with the work you do in the marketing field. As the manager of a marketing agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping marketing agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Would you be open to discussing how AI and automation could potentially benefit your business? I'd love to schedule a call at your convenience to learn more about your needs and see if my expertise might be able to assist in any way. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
-    TKScrollTXT3 = "Hello [name], I hope this message finds you well. My name is [Your Name] and I specialize in helping businesses, like yours, save time and streamline their processes through the use of AI and automation. As someone who works in digital marketing, I'm sure you understand the importance of staying up-to-date with the latest trends and technologies in order to achieve your business goals. However, with so many tasks and responsibilities on your plate, it can be difficult to find the time to do everything that needs to be done. That's where AI and automation come in. By using these tools, you can automate repetitive and time-consuming tasks, freeing up your time to focus on more important, high-value work. I believe that our AI and automation solutions could be a valuable asset to your business. Would you be open to discussing how these tools could potentially benefit your ability and save you time? I'd love to schedule a call at your convenience to learn more about your needs and see if our solutions might be a good fit. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
+    name = basic_data['Name']
+    ability = basic_data['Ability']
+    sent_time = basic_data['Time']
+    sent_status = basic_data['Sent-Status']
+    location = basic_data['Location']
+    c_name = basic_data['Company']
+    c_designation = basic_data['Designation']
+
+    TKScrollTXT1 = "Hi [name] I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for [keyword] agencies. I recently came across your ability, and was impressed with the work you've done in the [keyword] field. As the founder of a [keyword] agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping [keyword] agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Best Regards [Your Name]"
+    TKScrollTXT2 = "Hi [name], I hope this message finds you well. My name is [Your Name] and I specialize in AI and automation for [keyword] agencies. I recently came across your ability, and was impressed with the work you do in the [keyword] field. As the manager of a [keyword] agency, I'm sure you're always looking for ways to improve efficiency and stay ahead of the curve. I believe that AI and automation can play a significant role in helping [keyword] agencies achieve these goals. As someone who has experience in this area, I'd love to connect and see if there might be opportunities to collaborate or exchange ideas. Would you be open to discussing how AI and automation could potentially benefit your business? I'd love to schedule a call at your convenience to learn more about your needs and see if my expertise might be able to assist in any way. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
+    TKScrollTXT3 = "Hello [name], I hope this message finds you well. My name is [Your Name] and I specialize in helping businesses, like yours, save time and streamline their processes through the use of AI and automation. As someone who works in [keyword], I'm sure you understand the importance of staying up-to-date with the latest trends and technologies in order to achieve your business goals. However, with so many tasks and responsibilities on your plate, it can be difficult to find the time to do everything that needs to be done. That's where AI and automation come in. By using these tools, you can automate repetitive and time-consuming tasks, freeing up your time to focus on more important, high-value work. I believe that our AI and automation solutions could be a valuable asset to your business. Would you be open to discussing how these tools could potentially benefit your ability and save you time? I'd love to schedule a call at your convenience to learn more about your needs and see if our solutions might be a good fit. Thank you for considering my request. I look forward to connecting with you. Best regards, [Your Name]"
 
     for c in range(0, len(initial_data[n - 1]['cookies'])):
         cus_name = name[c]
@@ -143,6 +146,9 @@ def run():
         cus_sent_time = sent_time[c]
         cus_sent_status = sent_status[c]
         location_in = location[c]
+        cus_company_name = c_name[c]
+        cus_company_designation = c_designation[c]
+        keyword = initial_data[n - 1]['keyword'][c]
         start_time = time.time()
         cookies = initial_data[n - 1]['cookies'][c]
         print(cookies)
@@ -244,7 +250,7 @@ def run():
                             break
                         try:
                             # a.click()
-                            # time.sleep(50)
+                            #time.sleep(100)
                             print(a.text)
 
                             destn = driver.find_element(By.XPATH,
@@ -268,12 +274,76 @@ def run():
                                                                   '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
                                                                       in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
                                     except:
-                                        loc = driver.find_element(By.XPATH,
+                                        try:
+                                            loc = driver.find_element(By.XPATH,
                                                                   '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
                                                                       in_count) + ']/div/div/div[2]/div[1]/div[2]/div[2]').text
+                                        except:
+                                            loc = "Not provided"
+                            try:
+                                c_details = driver.find_element(By.XPATH,
+                                                          '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                              in_count) + ']/div/div/div[2]/div[2]/p').text
+                                try:
+                                    split_fun = c_details.split(" at")
+                                    company_designation = split_fun[0]
+                                    company_name = split_fun[1]
+                                except:
+                                    c_details = "Not Provided"
+                                    company_name = c_details
+                                    company_designation = c_details
+                            except:
+                                try:
+                                    c_details = driver.find_element(By.XPATH,
+                                                              '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                                  in_count) + ']/div/div/div[2]/div[2]/p').text
+                                    try:
+                                        split_fun = c_details.split(" at")
+                                        company_designation = split_fun[0]
+                                        company_name = split_fun[1]
+                                    except:
+                                        c_details = "Not Provided"
+                                        company_name = c_details
+                                        company_designation = c_details
+                                except:
+                                    try:
+                                        c_details = driver.find_element(By.XPATH,
+                                                                  '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                      in_count) + ']/div/div/div[2]/div[2]/p').text
+                                        try:
+                                            split_fun = c_details.split(" at")
+                                            company_designation = split_fun[0]
+                                            company_name = split_fun[1]
+                                        except:
+                                            c_details = "Not Provided"
+                                            company_name = c_details
+                                            company_designation = c_details
+                                    except:
+                                        try:
+                                            c_details = driver.find_element(By.XPATH,
+                                                                  '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                      in_count) + ']/div/div/div[2]/div[2]/p').text
+                                            try:
+                                                split_fun = c_details.split(" at")
+                                                company_designation = split_fun[0]
+                                                company_name = split_fun[1]
+                                            except:
+                                                c_details = "Not Provided"
+                                                company_name = c_details
+                                                company_designation = c_details
+
+
+                                        except:
+                                            c_details = "Not Provided"
+                                            company_name = c_details
+                                            company_designation = c_details
+
+
 
                             print(destn)
                             print(loc)
+                            print(company_name)
+                            print(company_designation)
 
                             in_count = in_count + 1
 
@@ -291,6 +361,8 @@ def run():
                                     msgSend = str(TKScrollTXT2)
                                     msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
                                     msgSend = msgSend.replace("[Your Name]", my_name.strip())
+                                    msgSend = msgSend.replace("[keyword]", keyword)
+
 
                                     writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                                         (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
@@ -299,6 +371,7 @@ def run():
                                     msgSend = str(TKScrollTXT3)
                                     msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
                                     msgSend = msgSend.replace("[Your Name]", my_name.strip())
+                                    msgSend = msgSend.replace("[keyword]", keyword)
 
                                     writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                                         (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
@@ -307,6 +380,7 @@ def run():
                                     msgSend = str(TKScrollTXT1)
                                     msgSend = msgSend.replace("[name]", f"{str(a.text).strip()}")
                                     msgSend = msgSend.replace("[Your Name]", my_name.strip())
+                                    msgSend = msgSend.replace("[keyword]", keyword)
 
                                     writeMsgArea = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                                         (By.XPATH, "//textarea[contains(@class,'ember-text-area ember-view')]")))
@@ -326,6 +400,8 @@ def run():
                             cus_ability.append(destn)
                             cus_name.append(a.text)
                             cus_sent_status.append("Request Sent")
+                            cus_company_name.append(company_name)
+                            cus_company_designation.append(company_designation)
                             location_in.append(loc)
                             print(f"\n[Info] Sleeping for {t_delay} secs")
 
@@ -348,10 +424,12 @@ def run():
         sent_status.append(cus_sent_status)
         sent_time.append(cus_sent_time)
         location.append(location_in)
+        c_name.append(cus_company_name)
+        c_designation.append(cus_company_designation)
         driver.quit()
     collection1.insert_one({'prev_con': prev_conf, 'acc_con': acc_conf, 'sent_con': sent_conf})
     collection2.insert_one(
-        {'name': name, 'designation': ability, 'time': sent_time, 'sent-status': sent_status, 'location': location})
+        {'Name': name, 'Designation': c_designation, 'Company': c_name, 'Ability': ability, 'Time': sent_time, 'Sent-Status': sent_status, 'Location': location})
 
 
 def updator():
