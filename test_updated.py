@@ -36,7 +36,7 @@ def driverInit():
     option.add_argument("--log-level=3")
     option.add_argument("--disable-infobars")
     option.add_argument("--disable-extensions")
-    option.add_argument("--headless")
+    # option.add_argument("--headless")
     prefs = {"credentials_enable_service": False,
              "profile.password_manager_enabled": False,
              "profile.default_content_setting_values.notifications": 2
@@ -168,6 +168,10 @@ def run():
         driver.get("https://www.linkedin.com")
         time.sleep(7)
 
+        #my_name = ((driver.find_element(By.XPATH,
+         #                               "/html/body/div[5]/div[3]/div/div/div[2]/div/div/div/div[1]/div[1]/a[1]/div[2]").text).split(
+          #  ","))[1]
+
         my_name = ((driver.find_element(By.XPATH,
                                         "//div[contains(@class,'t-16 t-black')]").text).split(
             ","))[1]
@@ -215,9 +219,9 @@ def run():
                         break
                     in_count = 1
                     driver.get(f"{finalUrl}&page={counter}")
-                    time.sleep(7)
+                    time.sleep(3)
                     scroll_down(driver)
-                    time.sleep(4)
+                    time.sleep(2)
                     # pChk = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                     #   (By.XPATH, "//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a")))
                     # if pChk:
@@ -227,25 +231,30 @@ def run():
                     # time.sleep(100)
                     for u in range(1, 11):
                         try:
-                            allUrls.append(driver.find_element(By.XPATH,
-                                                               '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
-                                                                   u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+
+                            allUrls.append(driver.find_element(By.XPATH, "(//a[@class='app-aware-link ']//span)[" + str(
+                                                                   u+1) + "]"))
+
                         except:
                             try:
                                 allUrls.append(driver.find_element(By.XPATH,
-                                                                   '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
+                                                                   '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
                                                                        u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
                             except:
                                 try:
                                     allUrls.append(driver.find_element(By.XPATH,
-                                                                       '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                       '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[2]/div/ul/li[' + str(
                                                                            u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
                                 except:
-                                    allUrls.append(driver.find_element(By.XPATH,
-                                                                       '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
-                                                                           u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+                                    try:
+                                        allUrls.append(driver.find_element(By.XPATH,
+                                                                           '/html/body/div[5]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                               u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
+                                    except:
+                                        allUrls.append(driver.find_element(By.XPATH,
+                                                                           '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
+                                                                               u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
 
-                    print(allUrls)
                     for a in allUrls:
                         if time.time() - start_time > 600:
                             break
@@ -416,7 +425,6 @@ def run():
                             # print(f"\n[Info] No Connect Button Found for : {a.text}")
                     counter += 1
                 except:
-                    logging.exception('msg')
                     print("\n[Info] No more profiles found....")
                     driver.quit()
                     break
