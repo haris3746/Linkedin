@@ -215,9 +215,9 @@ def run():
                         break
                     in_count = 1
                     driver.get(f"{finalUrl}&page={counter}")
-                    time.sleep(3)
+                    time.sleep(7)
                     scroll_down(driver)
-                    time.sleep(2)
+                    time.sleep(4)
                     # pChk = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                     #   (By.XPATH, "//span[@class='entity-result__title-line entity-result__title-line--2-lines']//a")))
                     # if pChk:
