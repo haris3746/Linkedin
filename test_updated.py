@@ -245,6 +245,7 @@ def run():
                                                                        '/html/body/div[4]/div[3]/div[2]/div/div[1]/main/div/div/div[3]/div/ul/li[' + str(
                                                                            u) + ']/div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]'))
 
+                    print(allUrls)
                     for a in allUrls:
                         if time.time() - start_time > 600:
                             break
@@ -415,6 +416,7 @@ def run():
                             # print(f"\n[Info] No Connect Button Found for : {a.text}")
                     counter += 1
                 except:
+                    logging.exception('msg')
                     print("\n[Info] No more profiles found....")
                     driver.quit()
                     break
